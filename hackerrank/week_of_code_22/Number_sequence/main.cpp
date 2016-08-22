@@ -13,7 +13,7 @@ int next(map<long, vector<long> > & newmap, map<long, vector<long>::iterator > &
 
     if(newmap.count(kind)==0)
         return 0;
-    map<long, vector <long>>::reverse_iterator riter(newmap.find(kind));
+    map<long, vector <long>>::reverse_iterator riter(++newmap.find(kind));
     map<long, vector <long>>::iterator it1;
     long ind = riter->first;
     mit[ind]++;
