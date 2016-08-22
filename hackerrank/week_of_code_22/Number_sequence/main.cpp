@@ -146,10 +146,12 @@ int main() {
     
     long index;
     map<long, vector<long>>::reverse_iterator riter = newmap.rbegin();
-    index = riter->first;
+    if(riter!=newmap.rend())
+        index = riter->first;
     
-    while(index=next(newmap, mit, index))
-        c++;
+    if(!newmap.empty())
+        while(index=next(newmap, mit, index))
+            c++;
     
     cout << c;
     
