@@ -66,158 +66,126 @@ int main(){
     for(long i=0;i<m;i++)
         elist[i+1] = i+1;
 
-    while(!elist.empty()){
-        iter = elist.begin();
-        e = iter->first;
-        x = ed[e][0];
-        y = ed[e][1];
+    for(int i=1;i<=m;i++){
+        e = i;
+        if(!mark[i]){
+            x = ed[e][0];
+            y = ed[e][1];
         
-        for(iter1 = nd[x].begin(); iter1 != nd[x].end(); iter1++)
-            for(iter2 = nd[y].begin(); iter2 != nd[y].end(); iter2++){
+            for(iter1 = nd[x].begin(); iter1 != nd[x].end(); iter1++){
                 e1 = *iter1;
-                e2 = *iter2;
-                if((e1 != e) && (e2 != e)){
-                    x1 = ed[e1][0];
-                    y1 = ed[e1][1];
-                    x2 = ed[e2][0];
-                    y2 = ed[e2][1];
-
-                    if(e>=e1)
-                        if(e>=e2){
-                            max = e;
-                            if(e1>=e2){
-                                mid = e1;
-                                min = e2; 
+                if(!mark[e1] && e1!=e){
+                    for(iter2 = nd[y].begin(); iter2 != nd[y].end(); iter2++){
+                        e2 = *iter2;
+                        if((e2 != e) && !mark[e2]){
+                            x1 = ed[e1][0];
+                            y1 = ed[e1][1];
+                            x2 = ed[e2][0];
+                            y2 = ed[e2][1];
+    
+                            if(e>=e1)
+                                if(e>=e2){
+                                    max = e;
+                                    if(e1>=e2){
+                                        mid = e1;
+                                        min = e2; 
+                                    }
+                                    else{
+                                        mid = e2;
+                                        min = e1;
+                                    }
+                                }
+                                else{
+                                    max = e2;
+                                    if(e1>=e){
+                                        mid = e1;
+                                        min = e2;
+                                    }
+                                    else{
+                                        mid = e2;
+                                        min = e1; 
+                                    }
+                                }
+                            else
+                                if(e1>=e2){
+                                    max = e1;
+                                    if(e>=e2){
+                                         mid = e;
+                                         min = e2;
+                                    }
+                                    else{
+                                        mid = e2;
+                                        min = e; 
+                                    }
+                                }
+                                else{
+                                    max = e2;
+                                    if(e1>=e){
+                                         mid = e1;
+                                         min = e;
+                                    }
+                                    else{
+                                        mid = e;
+                                        min = e1; 
+                                    }
+                                }
+    
+                            if(x1==x && x2==y && y1 == y2){
+                                trip.push_back(vector<long>());
+                                vriter = trip.rbegin();
+    
+                                (*vriter).push_back(min);
+                                (*vriter).push_back(mid);
+                                (*vriter).push_back(max);
+    
+                                mark[e] =   true;
+                                mark[e1]=   true;
+                                mark[e2]=   true;
+    
                             }
-                            else{
-                                mid = e2;
-                                min = e1;
+    
+                            else if(x1==x && y2==y && y1 == x2){
+                                trip.push_back(vector<long>());
+                                vriter = trip.rbegin();
+                                (*vriter).push_back(min);
+                                (*vriter).push_back(mid);
+                                (*vriter).push_back(max);
+    
+                                mark[e] =   true;
+                                mark[e1]=   true;
+                                mark[e2]=   true;
+                            
+                            }
+    
+                            else if(y1==x && x2==y && x1 == y2){
+                                trip.push_back(vector<long>());
+                                vriter = trip.rbegin();
+                                (*vriter).push_back(min);
+                                (*vriter).push_back(mid);
+                                (*vriter).push_back(max);
+    
+                                mark[e] =   true;
+                                mark[e1]=   true;
+                                mark[e2]=   true;
+                             
+                            }
+    
+                            else if(y1==x && y2==y && x1 == x2){
+                                trip.push_back(vector<long>());
+                                vriter = trip.rbegin();
+                                (*vriter).push_back(min);
+                                (*vriter).push_back(mid);
+                                (*vriter).push_back(max);
+    
+                                mark[e] =   true;
+                                mark[e1]=   true;
+                                mark[e2]=   true;
                             }
                         }
-                        else{
-                            max = e2;
-                            if(e1>=e){
-                                mid = e1;
-                                min = e2;
-                            }
-                            else{
-                                mid = e2;
-                                min = e1; 
-                            }
-                        }
-                    else
-                        if(e1>=e2){
-                            max = e1;
-                            if(e>=e2){
-                                 mid = e;
-                                 min = e2;
-                            }
-                            else{
-                                mid = e2;
-                                min = e; 
-                            }
-                        }
-                        else{
-                            max = e2;
-                            if(e1>=e){
-                                 mid = e1;
-                                 min = e;
-                            }
-                            else{
-                                mid = e;
-                                min = e1; 
-                            }
-                        }
-
-                    if(x1==x && x2==y && y1 == y2 && !mark[e1] && !mark[e2]){
-                        trip.push_back(vector<long>());
-                        vriter = trip.rbegin();
-
-                        (*vriter).push_back(min);
-                        (*vriter).push_back(mid);
-                        (*vriter).push_back(max);
-
-                        mark[e] =   true;
-                        mark[e1]=   true;
-                        mark[e2]=   true;
-
-                        iter = elist.find(e);
-                        elist.erase(iter);
-
-                        iter = elist.find(e1);
-                        elist.erase(iter);
-
-                        iter = elist.find(e2);
-                        elist.erase(iter);
-                    }
-
-                    else if(x1==x && y2==y && y1 == x2 && !mark[e1] && !mark[e2]){
-                        trip.push_back(vector<long>());
-                        vriter = trip.rbegin();
-                        (*vriter).push_back(min);
-                        (*vriter).push_back(mid);
-                        (*vriter).push_back(max);
-
-                        mark[e] =   true;
-                        mark[e1]=   true;
-                        mark[e2]=   true;
-
-                        iter = elist.find(e);
-                        elist.erase(iter);
-
-                        iter = elist.find(e1);
-                        elist.erase(iter);
-
-                        iter = elist.find(e2);
-                        elist.erase(iter);
-                    
-                    }
-
-                    else if(y1==x && x2==y && x1 == y2 && !mark[e1] && !mark[e2]){
-                        trip.push_back(vector<long>());
-                        vriter = trip.rbegin();
-                        (*vriter).push_back(min);
-                        (*vriter).push_back(mid);
-                        (*vriter).push_back(max);
-
-                        mark[e] =   true;
-                        mark[e1]=   true;
-                        mark[e2]=   true;
-
-                        iter = elist.find(e);
-                        elist.erase(iter);
-
-                        iter = elist.find(e1);
-                        elist.erase(iter);
-
-                        iter = elist.find(e2);
-                        elist.erase(iter);
-                     
-                    }
-
-                    else if(y1==x && y2==y && x1 == x2 && !mark[e1] && !mark[e2]){
-                        trip.push_back(vector<long>());
-                        vriter = trip.rbegin();
-                        (*vriter).push_back(min);
-                        (*vriter).push_back(mid);
-                        (*vriter).push_back(max);
-
-                        mark[e] =   true;
-                        mark[e1]=   true;
-                        mark[e2]=   true;
-
-                        iter = elist.find(e);
-                        elist.erase(iter);
-
-                        iter = elist.find(e1);
-                        elist.erase(iter);
-
-                        iter = elist.find(e2);
-                        elist.erase(iter);
-                    
                     }
                 }
             }
+        }
     }
 
     cout << trip.size() << endl;
