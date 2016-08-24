@@ -97,7 +97,7 @@ int main() {
                                 m[p].erase(it);
                         }
                         if(m[p].empty()){
-                            cout << 0;
+                            cout << 0 ;
                             return 0;
                         }
                     }
@@ -150,8 +150,10 @@ int main() {
         index = riter->first;
     
     if(!newmap.empty())
-        while(index=next(newmap, mit, index))
+        while(index=next(newmap, mit, index)){
             c++;
+            c%=mod;
+        }
     
     cout << c;
     
