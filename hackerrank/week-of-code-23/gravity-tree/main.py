@@ -4,14 +4,12 @@ import math
 
 p={}
 c={}
-an={}
 can={}
 di={}
 
 n=int(raw_input())
 s=raw_input().split(' ')
 
-an[1]=[1]
 ch=0
 
 for i in xrange(n):
@@ -22,18 +20,16 @@ for i in xrange(n-1):
     p[i+2]=ch
     c[ch].append(i+2)
 
-qu=[1]
-
-while(len(qu)!=0):
-    cur=qu.pop(0)
-    if(len(c[cur])!=0):
-        qu.extend(c[cur])
-    if(cur==1):
-        an[cur]=[1]
+def chan(m,n):                      # Check if m is an ancestor of n
+    if(m==1):
+        return True
     else:
-        an[cur]=[]
-        an[cur].append(cur)
-        an[cur].extend(an[p[cur]])
+        ct=n
+        while(ct!=1):
+            if(ct==m):
+                return True
+            ct=p[ct]
+        return False
 
 def anc(m,n): 
     if(can.has_key(m) and can[m].has_key(n)):
@@ -47,12 +43,15 @@ def anc(m,n):
  
         if(m==n):
             can[m][n]=m
-        elif(m in an[n]):
+
+        elif(chan(m,n)):
             can[m][n]=m
             can[n][m]=m
-        elif(n in an[m]):
+        
+        elif(chan(n,m)):
             can[m][n]=n
             can[n][m]=n
+ 
         else:
             can[m][n]=anc(p[m],p[n])
             can[n][m]=can[m][n]
