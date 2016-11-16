@@ -9,17 +9,17 @@ def func(a):
     s=0
     l=len(a)
     for i in xrange(l):
-        if(a[i]>mx):
+        if(a[i]>=mx):
             mx=a[i]
         if(a[i]>0):
             pos+=1
         s+=a[i]
-        if(s>smx):
+        if(s>=smx):
             smx=s
             smnl=smn
-        if(s<smn):
+        if(s<=smn):
             smn=s
-        if(a[i]>0):
+        if(a[i]>=0):
             nas+=a[i]
     cas=smx-smnl
     if(pos==0):
@@ -27,12 +27,11 @@ def func(a):
         cas=mx
     print cas, nas
 
-t=int(raw_input())
+t=long(raw_input())
 for i in xrange(t):
-    n=int(raw_input())
+    n=long(raw_input())
     s=raw_input().split(' ')
     a=[]
     for j in xrange(n):
-        a.append(int(s[j]))
+        a.append(long(s[j]))
     func(a)
-
