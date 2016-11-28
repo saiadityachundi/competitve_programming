@@ -1,0 +1,28 @@
+Write a program to print a sequence of numbers denoting denominations
+given as input(along with an amount), in descending order, such that the
+given amount is formed from the sequence using minimum number of elements.
+If no such sequence is possible, print -1.
+
+input:
+The first line input consists of space separated integers denoting the
+denominations.
+The second line contains a single number, which is the amount to be
+formed using the denominations.
+
+output:
+Print space separated integers in descending order, whose sum makes the
+amount given. If no such sequence is possible, print -1.
+
+Example:
+-#1-
+Input:
+1 2 5
+12
+Output:
+5 5 2
+-#2-
+Input:
+1 2
+4
+Output:
+2 2
