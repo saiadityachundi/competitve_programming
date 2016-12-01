@@ -42,7 +42,7 @@ def func(i,ms):
     j=hmn
     while(j<=z):
         if(opf(i,ms-j)):
-            return i-j
+            return a[i]-j
         j+=1
     return func(i+1, ms)
 
