@@ -35,6 +35,8 @@ def opf(i,ms):
         return op[i][ms]
 
 def func(i,ms):
+    if(i==n):
+        return a[n-1]
     if(i==0):
         z=hmx
     else:

@@ -9,7 +9,7 @@ int **op;
 int opf(int i,int ms){
     if(op[i][ms]!=-1)
         return op[i][ms];
-    else if(i==n-1)
+    else if(i==n-1){
         if(ms>=hmn && ms<=hmx){
             op[i][ms]=1;
             return op[i][ms];
@@ -18,6 +18,7 @@ int opf(int i,int ms){
             op[i][ms]=0;
             return op[i][ms];
         }
+    }
     else if(ms<hmn){
         op[i][ms]=0;
         return op[i][ms];
@@ -33,6 +34,8 @@ int opf(int i,int ms){
 }
 
 int func(int i,int ms){
+    if(i==n):
+        return a[i-1];
     int z,j;
     if(i==0)
         z=hmx;
@@ -56,7 +59,7 @@ int main(){
     for(int i=0;i<n;i++)
         cin >> a[i];
     
-    cin >> m >> hmx >> hmn;
+    cin >> m >> hmn >> hmx;
 
     op=new int*[n];
     for(int i=0;i<n;i++){
