@@ -13,7 +13,7 @@ lc=$(expr $erws + 1)                                            # current line
 while [ $lc -le 63 ];do
     lcr=$(expr 64 - $lc)                                            # current line in reverse rank
     eit=$(printf "%.3f" $(echo "-l(1-($lcr/64))/l(2)" | bc -l))     # effective iteration
-    eitn=$(printf "%.f" $eit)                                       # greatest integer <= eit
+    eitn=${eit%.*}
     if [ 1 -eq $(echo "$eitn!=$eit" | bc -l) ]; then
         eit=$(expr $eitn + 1)
     else
