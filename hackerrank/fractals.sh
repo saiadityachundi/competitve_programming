@@ -1,18 +1,29 @@
 #!/usr/bin/bash
-read n                                                          # n denotes iteration number
-rws=$(printf "%.f" `echo "(64)*(1-(1/(2^$n)))" | bc -l`)        # rws is the number of non-empty rows
-erws=$(printf "%.f" `expr 63 - $rws`)                           # erws is the number of empty rows
 
-for((i=1; i<=$erws; i++)); do
-    for j in {1..100};do
+declare -a fa           # constant for an iteration
+declare -a sa           # current array variable
+declare -a ma
+
+read N
+rws=$(printf "%.f" $(echo "(64)*(1-(1/(2^$N)))" | bc -l))
+erws=$(expr 63 - $rws)
+
+for((il=0;il<$erws;il++));do
+    for jl in {1..100};do
         printf "_"
     done
     printf "\n"
 done
-lc=$(expr $erws + 1)                                            # current line
-while [ $lc -le 63 ];do
-    lcr=$(expr 64 - $lc)                                            # current line in reverse rank
-    eit=$(printf "%.3f" $(echo "-l(1-($lcr/64))/l(2)" | bc -l))     # effective iteration
+
+lcr=$rws
+
+
+lid=1
+fa=( 50 )
+
+while [ $lid -le $lcr ];do
+    
+    eit=$(printf "%.3f" $(echo "-l(1-($lid/64))/l(2)" | bc -l))     # effective iteration
     eitn=${eit%.*}
     if [ 1 -eq $(echo "$eitn!=$eit" | bc -l) ]; then
         eit=$(expr $eitn + 1)
@@ -20,55 +31,98 @@ while [ $lc -le 63 ];do
         eit=$eitn
     fi
     nlp=$(printf "%.f" `echo "(64)*(1-(1/(2^$eitn)))" | bc -l`)     # number of lines upto current/previous iteration
-    lcro=$(expr $lcr - $nlp)                                        # offset of current line from reverse order
+    lcro=$(expr $lid - $nlp)                                        # offset of current line from reverse order
     hlci=$(printf "%.f" `echo "16/(2^($eit-1))" | bc -l`)           # number of half lines in current iteration
     hlo=$(expr $lcro - $hlci)                                       # offset beyond half lines of current itrn.
     peit=$(expr $eit - 1)                                           # Previous iteration number
-    declare -a fa                                                   # first Array
-    declare -a sa                                                   # second Array
-    fa=( 50 )
-    for(( i=1;i<=$peit;i++ ));do
-        sa=()
-        for j in "${fa[@]}";do
-            sa=( "${sa[@]}" "$(expr $j - $(printf "%.f" $(echo "16/(2^($i-1))" | bc -l)))" "$(expr $j + $(printf "%.f" $(echo "16/(2^($i-1))" | bc -l)))")
-        done
-        fa=(${sa[@]})
-    done
-    if [ $hlo -ge 0 ]; then
-        sa=()
-        for j in "${fa[@]}";do
-            sa=( "${sa[@]}" "$(expr $j - $hlo)" "$(expr $j + $hlo)")
-        done
-        fa=(${sa[@]})
-    elif [ $lcro -eq 0 ];then
-        sa=()
-        for j in "${fa[@]}";do
-            sa=( "${sa[@]}" "$(expr $j - $(printf "%.f" $(echo "16/(2^($eit-1))" | bc -l)))" "$(expr $j + $(printf "%.f" $(echo "16/(2^($eit-1))" | bc -l)))")
-        done
-        fa=(${sa[@]})
-    fi
+    
     #echo rws: $rws
     #echo erws: $erws
     #echo lc: $lc
     #echo lcr: $lcr
+    #echo lid: $lid
     #echo eit: $eit
     #echo eitn: $eitn
     #echo nlp: $nlp
     #echo lcro: $lcro
     #echo hlci: $hlci
     #echo hlo: $hlo
-    id=0
-    for i in {1..100};do
-        if [ 1 -eq $(echo "$id <= ${#fa[@]}-1" | bc -l) ];then
-            if [ $i -eq ${fa[$id]} ];then
-                printf "1"
-                ((id++))
+    #echo fa: ${fa[@]}
+    #echo sa: ${sa[@]}
+    #echo st: $st
+
+    if [ $lid -eq 1 ];then
+        st=
+        for i in {1..100};do
+            if [ $i -eq 50 ];then
+                st=$st"1"
             else
-                printf "_"
+                st=$st"_"
             fi
-        else printf "_"
+        done
+        ma[$lid]=$st
+        (( lid++ ))
+    else
+        if [ $hlo -le 0 ];then
+            if [ $lcro -ne 0 ];then
+                ma[$lid]=$st
+                (( lid++ ))
+            else
+                sa=()
+                for(( k=0;k<${#fa[@]};k++ ));do
+                    sa=("${sa[@]}" "$(expr ${fa[$k]} - $hlci)" "$(expr ${fa[$k]} + $hlci)")
+                done
+                id=0
+                st=
+                for j in {1..100};do
+                    if [ $id -lt ${#sa[@]} ];then
+                        if [ $j -eq ${sa[$id]} ];then
+                            st=$st"1"
+                            (( id++ ))
+                        else
+                            st=$st"_"
+                        fi
+                    else
+                        st=$st"_"
+                    fi
+                done
+                ma[$lid]=$st
+                (( lid++ ))
+                fa=("${sa[@]}")
+            fi
+        else
+            sa=()
+            #echo going into the for loop
+            for((kr=0;kr<${#fa[@]};kr++));do
+                sa=( "${sa[@]}" "$(expr ${fa[$kr]} - $hlo)" "$(expr ${fa[$kr]} + $hlo)")
+            done
+            #echo came from the for loop
+            id=0
+            st=
+            for j in {1..100};do
+                if [ $id -lt ${#sa[@]} ];then
+                    if [ $j -eq ${sa[$id]} ];then
+                        st=$st"1"
+                        (( id++ ))
+                    else
+                        st=$st"_"
+                    fi
+                else
+                    st=$st"_"
+                fi
+            done
+            ma[$lid]=$st
+            (( lid++ ))
         fi
-    done
-    printf "\n"
-    ((lc++))
+    fi
+
+    #echo
+    #echo fa: ${fa[@]}
+    #echo sa: ${sa[@]}
+    #echo st: $st
+    #echo 
+done
+
+for(( i=$lcr; i>=1; i-- ));do
+    echo ${ma[$i]}
 done
