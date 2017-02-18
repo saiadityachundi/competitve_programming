@@ -31,7 +31,7 @@ int mxn(vector<int>::iterator at,vector<int>::iterator bt){
 
     rsm=x-rsm;
 
-    if(rsm<=0){
+    if(rsm<0){
         dp[at][bt]=0;
         return 0;
     }
