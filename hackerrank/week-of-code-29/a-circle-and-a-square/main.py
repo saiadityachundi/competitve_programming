@@ -5,6 +5,11 @@ import math
 x1=x2=x3=x4=y1=y2=y3=y4=xs=ys=xc=yc=r=h=w=m1=m2=m3=m4=c1=c2=c3=c4=k1=k2=k3=k4=0
 
 def insideSquare(x,y):
+    if(x1==x2 and y1==y2):
+        if(x==x1 and y==y1):
+            return True
+        else:
+            return False
     if(m1==0):
         if ((ys-c1)*(y-c1)>=0) and ((xs-k2)*(x-k2)>=0) and ((ys-c3)*(y-c3)>=0) and ((xs-k4)*(x-k4)>=0):
             return True
