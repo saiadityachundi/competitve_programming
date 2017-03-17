@@ -9,9 +9,7 @@ for i in xrange(n):
     al.append(a)
     wt.append(w)
 
-al.reverse()
-wt.reverse()
-
+'''
 def mc(pr, cu, k):
     if(k==0):
         if(cu<n):
@@ -46,3 +44,74 @@ def mc(pr, cu, k):
         return m2
 
 print mc(0, 0, k)
+'''
+
+wsm=[]
+wsm.append(wt[0])
+i=1
+while(i<n):
+    wsm.append(wsm[i-1]+wt[i])
+    i+=1
+
+mcs=[]
+mcs.append(0)
+i=1
+while(i<n):
+    mcs.append(mcs[i-1]+wt[i]*(al[i]-al[0]))
+    i+=1
+
+def msc(i,j):
+    return (mcs[j]-((al[i]-al[0])*(wsm[j]-wsm[i]))-mcs[i])
+'''
+print al
+print wt
+
+i=0
+while(i<n):
+    j=i+1
+    while(j<n):
+        print "i:"+str(i)+" j:"+str(j)+" "+str(mcs[j]-((al[i]-al[0])*(wsm[j]-wsm[i]))-mcs[i])
+        j+=1
+    i+=1
+
+for i in xrange(n):
+    print wsm[i]
+'''
+
+mpp={}
+
+def mc(ind, k):
+    if(mpp.has_key((ind,k))):
+        return mpp[(ind,k)]
+    if(ind+k>n):
+        mpp[(ind,k)]=float("inf")
+        return float("inf")
+    if(k==1):
+        mpp[(ind,k)]=float("inf")
+        return msc(ind, n-1)
+    if(k==0):
+        mpp[(ind,k)]=0
+        return 0
+    mcp={}
+    i=ind+1
+    #mn=float("inf")
+    while(i<n):
+        mcp[i]=mc(i,k-1)+msc(ind,i-1)
+        i+=1
+    mn=float("inf")
+    ind1 = -1
+    for j in mcp.keys():
+        if(mcp[j]<mn):
+            mn = mcp[j]
+            ind1=j
+    #print "ind1:"+str(ind1)+" k:"+str(k-1)+" mn:"+str(mn)
+    mpp[(ind,k)]=mn
+    return mn
+
+print mc(0,k)
+'''
+print mc(0,2)
+print msc(0,1)
+print mc(2,1)
+print msc(2,5)
+'''
