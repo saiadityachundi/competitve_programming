@@ -9,43 +9,6 @@ for i in xrange(n):
     al.append(a)
     wt.append(w)
 
-'''
-def mc(pr, cu, k):
-    if(k==0):
-        if(cu<n):
-            return float("inf")
-        else:
-        #print "I am returning zero"
-            return 0
-    if(cu==n):
-        #print "I am returning inf"
-        return float("inf")
-    m1 = mc(pr, cu+1, k)
-    i=pr
-    cs=0
-    while(i<=cu):
-        cs+=wt[i]*(al[i]-al[cu])
-        i+=1
-    m2 = mc(cu+1, cu+1, k-1)+cs
-    #print "n:",n
-    #print "pr:", pr
-    #print "cu:", cu
-    #print "k:", k
-    #print "m1:",m1
-    #print "cs:",cs
-    #print "m2:",m2
-    #print
-    #print
-    if(m1<m2):
-        #print "I am returning m1"
-        return m1
-    else:
-        #print "I am returning m2"
-        return m2
-
-print mc(0, 0, k)
-'''
-
 wsm=[]
 wsm.append(wt[0])
 i=1
@@ -62,56 +25,51 @@ while(i<n):
 
 def msc(i,j):
     return (mcs[j]-((al[i]-al[0])*(wsm[j]-wsm[i]))-mcs[i])
-'''
-print al
-print wt
 
-i=0
-while(i<n):
-    j=i+1
-    while(j<n):
-        print "i:"+str(i)+" j:"+str(j)+" "+str(mcs[j]-((al[i]-al[0])*(wsm[j]-wsm[i]))-mcs[i])
-        j+=1
-    i+=1
-
-for i in xrange(n):
-    print wsm[i]
-'''
+pr=[]
+pr.append(0)
 
 mpp={}
 
-def mc(ind, k):
-    if(mpp.has_key((ind,k))):
-        return mpp[(ind,k)]
-    if(ind+k>n):
-        mpp[(ind,k)]=float("inf")
-        return float("inf")
-    if(k==1):
-        mpp[(ind,k)]=float("inf")
-        return msc(ind, n-1)
+def mc(i,k):
+    #if(mpp.has_key((i,k))):
+    #    return mpp[(i,k)]
+    if(i==n-1):
+        if(k==1):
+            #mpp[(i,k)]=(n-1,0)
+            return (n-1,0)
+        else:
+            #mpp[(i,k)]=(n-1,float("inf"))
+            return (n-1,float("inf"))
     if(k==0):
-        mpp[(ind,k)]=0
-        return 0
-    mcp={}
-    i=ind+1
-    #mn=float("inf")
-    while(i<n):
-        mcp[i]=mc(i,k-1)+msc(ind,i-1)
-        i+=1
-    mn=float("inf")
-    ind1 = -1
-    for j in mcp.keys():
-        if(mcp[j]<mn):
-            mn = mcp[j]
-            ind1=j
-    #print "ind1:"+str(ind1)+" k:"+str(k-1)+" mn:"+str(mn)
-    mpp[(ind,k)]=mn
-    return mn
+        #mpp[(i,k)]=(n,0)
+        return (n,0)
+    if(i==0):
+        #mpp[(i,k)]=y+msc(0,x-1)
+        x,y = mc(1,k-1)
+        return (0,y+msc(0,x-1))
+    if(i+k>n):
+        #mpp[(i,k)]=(n,float("inf"))
+        return (n,float("inf"))
+    prt = pr[0]
+    pr[0] = i
+    ns1,m1 = mc(i+1, k-1)
+    pr[0] = prt
+    ns2,m2 = mc(i+1, k)
+    m3 = m1+msc(i,ns1-1)+msc(i-1,pr[0])
+    m4 = m2+msc(pr[0],ns2-1)
+    if(m3<m4):
+        #print "i,k: ",i,k,(i,m1+msc(i,ns1-1))
+        #mpp[(i,k)]=(i,m1+msc(i,ns1-1))
+        return (i,m1+msc(i,ns1-1))
+    else:
+        #print "i,k: ",i,k,(ns2,m2)
+        #mpp[(i,k)]=(ns2,m2)
+        return (ns2,m2)
 
-print mc(0,k)
 '''
-print mc(0,2)
-print msc(0,1)
-print mc(2,1)
-print msc(2,5)
+for i in xrange(n):
+    print "i,j:",i,i,msc(i,i)
 '''
+x,y = mc(0,k)
+print y
