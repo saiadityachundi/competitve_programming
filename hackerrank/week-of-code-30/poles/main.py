@@ -29,43 +29,46 @@ def msc(i,j):
 pr=[]
 pr.append(0)
 
-mpp={}
+mp={}
 
-def mc(i,k):
-    #if(mpp.has_key((i,k))):
-    #    return mpp[(i,k)]
-    if(i==n-1):
-        if(k==1):
-            #mpp[(i,k)]=(n-1,0)
-            return (n-1,0)
-        else:
-            #mpp[(i,k)]=(n-1,float("inf"))
-            return (n-1,float("inf"))
+def mc(ind, k):
+    if(mp.has_key((ind,k))):
+        return mp[(ind,k)]
+    if(ind+k>n):
+        mp[(ind,k)]=(n,float("inf"))
+        return mp[(ind,k)]
+    if(ind+k == 0):
+        mp[(ind,k)]=(ind,0)
+        return mp[(ind,k)]
     if(k==0):
-        #mpp[(i,k)]=(n,0)
-        return (n,0)
-    if(i==0):
-        #mpp[(i,k)]=y+msc(0,x-1)
+        mp[(ind,k)]=(n,0)
+        return mp[(ind,k)]
+    if(ind==n-1):
+        if(k==1):
+            mp[(ind,k)]=(n-1,0)
+            return mp[(ind,k)]
+        else:
+            mp[(ind,k)]=(n,float("inf"))
+            return mp[(ind,k)]
+    if(ind==0):
         x,y = mc(1,k-1)
-        return (0,y+msc(0,x-1))
-    if(i+k>n):
-        #mpp[(i,k)]=(n,float("inf"))
-        return (n,float("inf"))
-    prt = pr[0]
-    pr[0] = i
-    ns1,m1 = mc(i+1, k-1)
-    pr[0] = prt
-    ns2,m2 = mc(i+1, k)
-    m3 = m1+msc(i,ns1-1)+msc(i-1,pr[0])
-    m4 = m2+msc(pr[0],ns2-1)
+        mp[(ind,k)]=(0,y+msc(0,x-1))
+        return mp[(ind,k)]
+
+    prt=pr[0]
+    pr[0]=ind
+    ns1,m1=mc(ind+1,k-1)
+    pr[0]=prt
+    ns2,m2=mc(ind+1,k)
+    m3=m1+msc(pr[0],ind-1)+msc(ind,ns1-1)
+    m4=m2+msc(pr[0],ns2-1)
+
     if(m3<m4):
-        #print "i,k: ",i,k,(i,m1+msc(i,ns1-1))
-        #mpp[(i,k)]=(i,m1+msc(i,ns1-1))
-        return (i,m1+msc(i,ns1-1))
+        mp[(ind,k)]=(ind,m1+msc(ind,ns1-1))
+        return mp[(ind,k)]
     else:
-        #print "i,k: ",i,k,(ns2,m2)
-        #mpp[(i,k)]=(ns2,m2)
-        return (ns2,m2)
+        mp[(ind,k)]=(ns2,m2)
+        return mp[(ind,k)]
 
 '''
 for i in xrange(n):
