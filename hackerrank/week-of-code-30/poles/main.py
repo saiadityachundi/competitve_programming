@@ -60,9 +60,9 @@ def addl((m,c),e):              # slopes come in decreasing order
             if(c>c1):
                 e[0] = (m,c,-float("inf"),float("inf"))
         else:
-            x = insxn(m,c,me1,c1)
+            x = insxn(m,c,m1,c1)
             e[0] = (m1,c1,-float("inf"),x)
-            e.append(m,c,x,float("inf"))
+            e.append((m,c,x,float("inf")))
     else:
         m1,c1,x1,y1 = e[-1]
         if(m1==m):
@@ -76,7 +76,7 @@ def addl((m,c),e):              # slopes come in decreasing order
                 addl((m,c),e)
             else:
                 e[-1] = (m1,c1,x1,x)
-                e.append(m,c,x,float("inf"))
+                e.append((m,c,x,float("inf")))
 
 def hval(x,e,st,en):
     if(en==st+1):
@@ -96,7 +96,7 @@ j = 1
 i = n-1
 while(i>-1):
     mc[(i,j)] = msc(i,n-1)
-    print "mc[("+str(i)+","+str(j)+")]: "+str(mc[(i,j)])
+    #print "mc[("+str(i)+","+str(j)+")]: "+str(mc[(i,j)])
     i-=1
 
 j = 2
@@ -105,21 +105,21 @@ while(j<=kl):
     e = []
     while(i>=0):
         k = i+1
-        mk = wsm[i]-wsm[k-1]                            # slopes come in descending order
-        ck = mc[(k,j-1)] + mcs[k-1] - mcs[i]
-        x = (al[i]-al[0])
+        mk = wsm[k-1]                            # slopes come in descending order
+        ck = mc[(k,j-1)] + mcs[k-1] 
+        x = -(al[i]-al[0]) 
         addl((mk,ck),e)
 
-        mc[(i,j)] = hval(x,e,0,len(e)-1)
-        print "mc[("+str(i)+","+str(j)+")]: "+str(mc[(i,j)])
+        mc[(i,j)] = hval(x,e,0,len(e)-1) - mcs[i] + (al[i]-al[0])*wsm[i]
+        #print "mc[("+str(i)+","+str(j)+")]: "+str(mc[(i,j)])
 
         # ---------------------------------------------------------------------------------------- #
         #mc[(i,j)] = float("inf")
         #k = i+1
         #while(k<=n-j+1):
-        #    ck = mc[(k,j-1)] + mcs[k-1] -mcs[i]
-        #    mk = wsm[i]-wsm[k-1]
-        #    x = (al[i]-al[0])
+        #    ck = mc[(k,j-1)] + mcs[k-1] -mcs[i]+(al[i]-al[0])*wsm[i]
+        #    mk = wsm[k-1]
+        #    x = -(al[i]-al[0])
         #    #mc[(i,j)] = min(mc[(i,j)],mc[(k,j-1)]+mcs[k-1]-(al[i]-al[0])*(wsm[k-1]-wsm[i])-mcs[i])
         #    mc[(i,j)] = min(mc[(i,j)], mk*x+ck)
         #    k+=1
