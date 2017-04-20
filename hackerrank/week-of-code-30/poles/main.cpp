@@ -9,15 +9,14 @@
 using namespace std;
 typedef long long ll;
 typedef long double ld;
-//struct line_s{
-//    ll m,c;
-//    ld xl,xr;
-//    inline ll get(ll x){
-//        return m*x+c;
-//    }
-//};
+struct line_s{
+    ll m,c;
+    ld xl,xr;
+    inline ll get(ll x){
+        return m*x+c;
+    }
+};
 ll N,K;
-//deque<ll> lines;
 
 struct line{
     ld m,c;
