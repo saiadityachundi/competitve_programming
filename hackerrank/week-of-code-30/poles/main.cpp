@@ -1,6 +1,8 @@
 #include<algorithm>
 #include<iostream>
+#include<deque>
 #include<climits>
+#include<cfloat>
 #include<vector>
 #include<map>
 
@@ -9,9 +11,70 @@ typedef long long ll;
 typedef long double ld;
 ll N,K;
 
+struct line{
+    ld m,c;
+    ld xl = LDBL_MIN;
+    ld xr = LDBL_MAX;
+};
+
+deque<line> lines;
+
 //inline ll msc(ll *mcs,ll i,ll j){
 //    return (mcs[j]-mcs[i]-((al[i]-al[0])*(wsm[j]-wsm[i])));
 //}
+
+ld insxn(line l1,line l2){
+    return (l1.c - l2.c)/(l2.m - l1.m);
+}
+
+void addl(line l){
+    line l1;
+    ld x;
+    if(lines.size()==0)
+        lines.push_back(l);
+    else if(lines.size()==1){
+        l1 = lines.front();
+        lines.pop_back();
+        x = insxn(l,l1);
+        l1.xr = x;
+        l.xl = x;
+        lines.push_back(l1);
+        lines.push_back(l);
+    }
+    else{
+        l1 = lines.back();
+        lines.pop_back();
+        x = insxn(l,l1);
+        if(x<=l1.xl){
+            addl(l);
+        }
+        else{
+            l1.xr = x;
+            l.xl = x;
+            lines.push_back(l1);
+            lines.push_back(l);
+        }
+    }
+}
+
+ll hval(ll x,ll st,ll en){
+    ll md;
+    if(en==st)
+        return ((lines[st].m)*x)+(lines[st].c);
+    if(en==st+1){
+        if(x<=lines[st].xr)
+            return ((lines[st].m)*x)+(lines[st].c);
+        else
+            return ((lines[en].m)*x)+(lines[en].c);
+    }
+    md = (st+en)/2;
+    if(lines[md].xl<=x && x<=lines[md].xr)
+        return ((lines[md].m)*x)+(lines[md].c);
+    else if(x<lines[md].xl)
+        return hval(x,st,md);
+    else
+        return hval(x,md,en);
+}
 
 int main(){
     cin >> N >> K;
@@ -41,25 +104,36 @@ int main(){
         i--;
     }
 
+
     j = 2;
     while(j<=K){
        i = N-j;
+       lines.clear();
        while(i>=0){
-           mc[i][j] = LLONG_MAX;
+           //mc[i][j] = LLONG_MAX;
            k = i+1;
-           while(k<=N-j+1){
-               ck = mc[k][j-1]+mcs[k-1]-mcs[i]+(al[i]-al[0])*wsm[i];
-               mk = wsm[k-1];
-               x = -(al[i]-al[0]);
-               mc[i][j] = min(mc[i][j],mk*x+ck);
-               k+=1;
-           }
+           //while(k<=N-j+1){
+           ck = mc[k][j-1]+mcs[k-1];
+           mk = wsm[k-1];
+           x = -(al[i]-al[0]);
+           line newl;
+           newl.m = mk;
+           newl.c = ck;
+           newl.xl = LDBL_MIN;
+           newl.xr = LDBL_MAX;
+           addl(newl);
+           ld en = lines.size();
+           mc[i][j] = hval(x,0,lines.size()-1);
+           //mc[i][j] = min(mc[i][j],mk*x+ck);
+           //    k+=1;
+           //}
+           mc[i][j]+=(al[i]-al[0])*wsm[i]-mcs[i];
            i-=1;
        }
        j+=1;
     }
 
-    cout << mc[0][K];
+    cout << mc[0][K]<< endl;
 
     return 0;
 }
