@@ -9,7 +9,15 @@
 using namespace std;
 typedef long long ll;
 typedef long double ld;
+//struct line_s{
+//    ll m,c;
+//    ld xl,xr;
+//    inline ll get(ll x){
+//        return m*x+c;
+//    }
+//};
 ll N,K;
+//deque<ll> lines;
 
 struct line{
     ld m,c;
@@ -79,7 +87,7 @@ ll hval(ll x,ll st,ll en){
 int main(){
     cin >> N >> K;
     ll al[N],wt[N],wsm[N],mcs[N];;
-    ll mc[N][2];
+    ll mc[N][2];//ll mc[N][K+1];
     ll i,j,k;
     for(i=0;i<N;i++){
         cin >> al[i] >> wt[i];
@@ -105,8 +113,7 @@ int main(){
     }
 
     for(ll p=0;p<N;p++)
-        mc[p][1] = mc[p][0];
-
+        mc[p][1]=mc[p][0];
 
     j = 2;
     while(j<=K){
