@@ -79,7 +79,7 @@ ll hval(ll x,ll st,ll en){
 int main(){
     cin >> N >> K;
     ll al[N],wt[N],wsm[N],mcs[N];;
-    ll mc[N][K+1];
+    ll mc[N][2];
     ll i,j,k;
     for(i=0;i<N;i++){
         cin >> al[i] >> wt[i];
@@ -97,12 +97,15 @@ int main(){
 
     ll ck,mk,x;
     
-    j = 1;
+    j = 0;
     i = N-1;
     while(i>-1){
         mc[i][j] = /*msc(mcs,i,N-1);*/(mcs[N-1]-mcs[i]-((al[i]-al[0])*(wsm[N-1]-wsm[i])));
         i--;
     }
+
+    for(ll p=0;p<N;p++)
+        mc[p][1] = mc[p][0];
 
 
     j = 2;
@@ -113,7 +116,8 @@ int main(){
            //mc[i][j] = LLONG_MAX;
            k = i+1;
            //while(k<=N-j+1){
-           ck = mc[k][j-1]+mcs[k-1];
+           //ck = mc[k][j-1]+mcs[k-1];
+           ck = mc[k][0]+mcs[k-1];
            mk = wsm[k-1];
            x = -(al[i]-al[0]);
            line newl;
@@ -123,17 +127,19 @@ int main(){
            newl.xr = LDBL_MAX;
            addl(newl);
            ld en = lines.size();
-           mc[i][j] = hval(x,0,lines.size()-1);
+           mc[i][1] = hval(x,0,lines.size()-1);
            //mc[i][j] = min(mc[i][j],mk*x+ck);
            //    k+=1;
            //}
-           mc[i][j]+=(al[i]-al[0])*wsm[i]-mcs[i];
+           mc[i][1]+=(al[i]-al[0])*wsm[i]-mcs[i];
            i-=1;
        }
+       for(ll p=0;p<N;p++)
+           mc[p][0] = mc[p][1];
        j+=1;
     }
 
-    cout << mc[0][K]<< endl;
+    cout << mc[0][0]<< endl;
 
     return 0;
 }
