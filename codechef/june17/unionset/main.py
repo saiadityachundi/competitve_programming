@@ -3,19 +3,20 @@
 t = int(raw_input())
 for i in xrange(t):
     n,k = map(int, raw_input().split())
-    s={}
-    c={}
+    s=[]
+    c=[]
+    l={}
     for i in xrange(n):
-        c[i+1] = {}
+        c.append({})
         for j in xrange(k):
-            c[i+1][j+1]=1
+            c[i][j+1]=1
         sl = map(int, raw_input().split())
         sl.pop(0)
-        s[i+1]={}
+        s.append({})
         for j in sl:
-            s[i+1][j]=1
-            if c[i+1].has_key(j):
-                del c[i+1][j]
+            s[i][j]=1
+            if c[i].has_key(j):
+                del c[i][j]
 
     ct = 0
     i = 1
