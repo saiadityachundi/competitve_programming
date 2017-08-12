@@ -8,97 +8,84 @@ fg = n
 tg = 2*n
 og = 0
 
-#print fg,tg
-
 br = False
 
 for i in xrange(k):
-    if(fg<=0 and tg<=0):
-        print 'NO'
-        br = True
-        break
-    else:
-        if(fg<=0):
-            r = a[i]%2
-            q = (a[i]-r)/2
-            if(r==1):
-                q+=1
-            if(q<=tg):
-                tg-=q
-            else:
-                print 'NO'
-                br = True
-                break
-        elif(tg<=0):
-            r = a[i]%4
-            q = (a[i]-r)/4
-            if(r>0):
-                q+=1
-            if(q<=fg):
-                fg-=q
-            else:
-                print 'NO'
-                br = True
-                break
+    if(a[i]>0 and fg>0):
+        #print "H1"
+        q = a[i]/4
+        if(q<=fg):
+            #print "H2"
+            fg-=q
+            a[i]-=q*4
         else:
-            r = a[i]%4
-            q = (a[i]-r)/4
-            #print "r,q:",r,q
-            #print "fg,tg:",fg,tg
-            #print "--------"
-            if(q<=fg):
-                #print "I am in if"
-                fg-=q
-            else:
-                #print "I am in else"
-                #print "fg,tg:",fg,tg
-                q-=fg
-                fg=0
-                q*=2
-                if(q<=tg):
-                    #print "I am in 2if"
-                    tg-=q
-                else:
-                    #print "I am in 2else"
-                    print 'NO'
-                    br = True
-                    break
-            if(r!=0):
-                if(fg<=0 and tg<=0):
-                    print 'NO'
-                    br = True
-                    break
-                elif(fg<=0):
-                    #q = r
-                    #r = a[i]%2
-                    if(r==0):
-                        r = 0
-                    elif(r<=2):
-                        r = 1
-                    else:
-                        r = 2
-                    if(r<=tg):
-                        tg-=r
-                    else:
-                        print "NO"
-                        br = True
-                        break
-                elif(tg<=0):
-                    if(r==0):
-                        r = 0
-                    else:
-                        r = 1
-                    fg-=r
-                else:
-                    if(r==0):
-                        pass
-                    elif(r<=2):
-                        tg-=1
-                    else:
-                        fg-=1
-    #print fg,tg
+            #print "H3"
+            a[i]-=fg*4
+            fg=0
+    if(a[i]>0 and tg>0):
+        #print "H4"
+        q = a[i]/2
+        if(q<=tg):
+            #print "H5"
+            tg-=q
+            a[i]-=q*2
+            #print "tg,a[i]:",tg,a[i]
+        else:
+            #print "H6"
+            a[i]-=tg*2
+            tg = 0
+    if(a[i]>0 and og>0):
+        #print "H7"
+        q = a[i]
+        if(q<=og):
+            #print "H8"
+            og-=q
+            a[i]-=q
+        else:
+            #print "H9"
+            a[i]-=og
+            og = 0
+    if(a[i]==0):
+        continue
+    if(a[i]==1):
+        #print "H10"
+        if(tg>0):
+            #print "H11"
+            tg-=1
+        elif(fg>0):
+            #print "H12"
+            fg-=1
+            tg+=1
+        else:
+            #print "H13"
+            br = True
+            break
+    elif(a[i]==2):
+        #print "H14"
+        if(tg>0):
+            #print "H15"
+            tg-=1
+        elif(fg>0):
+            #print "H16"
+            fg-=1
+            og+=1
+        else:
+            #print "H17"
+            br = True
+            break
+    elif(a[i]==3):
+        #print "H18"
+        if(fg>0):
+            #print "H19"
+            fg-=1
+        else:
+            #print "H20"
+            br = True
+            break
 
-#print fg,tg
-if(not br):
+if(br):
+    #print "H21"
+    print 'NO'
+else:
+    #print "H22"
     print 'YES'
-
